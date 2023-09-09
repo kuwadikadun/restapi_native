@@ -42,18 +42,29 @@ require_once('connection.php');
         $description = $_POST['description'];
         $release_date = $_POST['release_date'];
 
-        $query = mysqli_query($conn, "INSERT INTO data (name, image, description, release_date) VALUES ('$name', '$image', '$description', '$release_date')");
+        $cek = $conn;
 
-        if($query){
-            $result = [
-                'status' => 200,
-                'info' => "Data Berhasil Ditambahkan!"
-            ];
-            echo json_encode([$result]);
+        if($cek == true){
+            if($name == null || $image == null || $description == null || $release_date == null) {
+                $result = [
+                    'status' => 400,
+                    'info' => "Semua field harus diisi!"
+                ];
+
+                echo json_encode([$result]);
+            } else {
+                $query = mysqli_query($conn, "INSERT INTO data (name, image, description, release_date) VALUES ('$name', '$image', '$description', '$release_date')");
+
+                $result = [
+                    'status' => 200,
+                    'info' => "Data Berhasil Ditambahkan!"
+                ];
+                echo json_encode([$result]);
+            }
         }else {
             $result = [
                 'status' => 400,
-                'info' => "Data Gagal Ditambahkan!"
+                'info' => "Tidak ada koneksi!"
             ];
             echo json_encode([$result]);
         }
@@ -81,18 +92,30 @@ require_once('connection.php');
         $description = $_GET['description'];
         $release_date = $_GET['release_date'];
 
-        $query = mysqli_query($conn, "UPDATE data SET name='$name', image='$image', description='$description', release_date='$release_date' WHERE id='$id'");
+        $cek = $conn;
 
-        if($query){
-            $result = [
-                'status' => 200,
-                'info' => "Data Berhasil Diubah!"
-            ];
-            echo json_encode([$result]);
+        if($cek == true){
+            if($name == null || $image == null || $description == null || $release_date == null) {
+                
+                $result = [
+                    'status' => 404,
+                    'info' => "Data Gagal Diubah!"
+                ];
+                echo json_encode([$result]);
+            } else {
+                $query = mysqli_query($conn, "UPDATE data SET name='$name', image='$image', description='$description', release_date='$release_date' WHERE id='$id'");
+
+                $result = [
+                    'status' => 200,
+                    'info' => "Data Berhasil Diubah!"
+                ];
+                echo json_encode([$result]);
+            }
+            
         }else {
             $result = [
                 'status' => 404,
-                'info' => "Data Gagal Diubah!"
+                'info' => "Tidak ada koneksi!"
             ];
             echo json_encode([$result]);
         }
